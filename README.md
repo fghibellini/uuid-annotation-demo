@@ -9,6 +9,7 @@ Just [install](https://developer.chrome.com/docs/extensions/mv3/getstarted/devel
 - `e149f586-0376-4a5b-9955-ffad5b139d02`
 
 ```javascript
+// just resolve any UUID to an HTML snippet and we'll take care of the rest
 function myUuidResolutionFunction(uuid) {
   const knownUUIDs = [
     { uuid: '7a18a230-f4d0-4fbb-b706-0a16479409a5', html: `The best <b>UUID</b> ever!` }
