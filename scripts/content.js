@@ -3,9 +3,6 @@ console.log("neo-vision loaded!")
 
 const cssPrefix = 'neo-v';
 const checkIntervalMs = 200;
-const knownUUIDs = [
-  { uuid: '7a18a230-f4d0-4fbb-b706-0a16479409a5', text: `The best UUID ever!` }
-]
 
 // https://stackoverflow.com/a/6640851
 const uuidRegex = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/
@@ -40,60 +37,67 @@ appendStyles(`
 }
 `)
 
-setInterval(() => {
-
-const iterator = document.createNodeIterator(
-  document.getRootNode(),
-  NodeFilter.SHOW_TEXT,
-  n => isSingleUuidNode(n) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT
-)
-
-function isSingleUuidNode(node) {
-  // ignore very big text nodes
-  // (we are periodically iterating over the whole document)
-  if (node.data.length > 1000) {
-    return false;
-  } else {
-    // we don't perform an exact match (/^...$/) since we want to be able
-    // to annotate things like the Nakadi event name: `availability-layer.retail-product_00f2a393-6889-4fc0-8cd9-86e454e6dfa3`
-    const uuidsInNode = node.data.match(new RegExp(uuidRegex, 'g')) || []
-    // more than 1 match not interesting as it wouldn't be clear which UUID the tooltip is for
-    return (uuidsInNode.length === 1)
-  }
+function userFn(uuid) {
+  const knownUUIDs = [
+    { uuid: '7a18a230-f4d0-4fbb-b706-0a16479409a5', html: `The best <b>UUID</b> ever!` }
+  ]
+  const matchingResult = knownUUIDs.find(x => x.uuid === uuid);
+  const html = matchingResult ? matchingResult.html : `<i>UNKNOWN UUID</i>`;
+  return html;
 }
 
-while (currentNode = iterator.nextNode()) {
-  const parent = currentNode.parentElement
-  if (!isDecorated(parent)) {
-    const uuid = currentNode.data.match(uuidRegex)[0];
-    const actionIcon = createActionIcon(uuid)
-    parent.appendChild(actionIcon);
-  }
-}
+function init(resolveFn) {
+  setInterval(() => {
+    const iterator = document.createNodeIterator(
+      document.getRootNode(),
+      NodeFilter.SHOW_TEXT,
+      n => isSingleUuidNode(n) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT
+    )
 
-}, checkIntervalMs)
+    function isSingleUuidNode(node) {
+      // ignore very big text nodes
+      // (we are periodically iterating over the whole document)
+      if (node.data.length > 1000) {
+        return false;
+      } else {
+        // we don't perform an exact match (/^...$/) since we want to be able
+        // to annotate even text that might INCLUDE a UUID (e.g. per-entity resources)
+        const uuidsInNode = node.data.match(new RegExp(uuidRegex, 'g')) || []
+        // more than 1 match not interesting as it wouldn't be clear which UUID the tooltip is for
+        // and splitting text nodes is beyond the scope for now
+        return (uuidsInNode.length === 1)
+      }
+    }
+
+    while (currentNode = iterator.nextNode()) {
+      const parent = currentNode.parentElement
+      if (!isDecorated(parent)) {
+        const uuid = currentNode.data.match(uuidRegex)[0];
+        const tooltipHtmlContents = resolveFn(uuid);
+        const actionIcon = createActionIcon(tooltipHtmlContents)
+        parent.appendChild(actionIcon);
+      }
+    }
+  }, checkIntervalMs)
+}
 
 function isDecorated(element) {
   return Array.from(element.children).some(x => x.classList.contains(`${cssPrefix}-action-icon`))
 }
 
-function createActionIcon(contents) {
+function createActionIcon(tooltipHtmlContents) {
   const actionIcon = document.createElement("span")
   actionIcon.classList.add(`${cssPrefix}-action-icon`);
   actionIcon.textContent = `ℹ️`;
-  const tooltip = createTooltip(contents);
+  const tooltip = createTooltip(tooltipHtmlContents);
   actionIcon.appendChild(tooltip);
   return actionIcon;
 }
 
-function createTooltip(uuid) {
+function createTooltip(tooltipHtmlContents) {
   const tooltip = document.createElement("div")
   tooltip.classList.add(`${cssPrefix}-tooltip`);
-
-  const matchingResult = knownUUIDs.find(x => x.uuid === uuid);
-
-  const contents = matchingResult ? matchingResult.text : `UNKNOWN UUID`;
-  tooltip.textContent = contents;
+  tooltip.innerHTML = tooltipHtmlContents;
   return tooltip;
 }
 
@@ -107,3 +111,8 @@ function appendStyles(styles) {
   document.head.appendChild(style);
 }
 
+// ========
+// = MAIN =
+// ========
+
+init(userFn)
