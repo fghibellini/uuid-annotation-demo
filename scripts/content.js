@@ -21,7 +21,6 @@ appendStyles(`
   visibility: visible !important;
 }
 
-
 .${cssPrefix}-tooltip {
   position: absolute;
   display: inline-block;
