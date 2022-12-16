@@ -14,6 +14,7 @@ appendStyles(`
   color: #76d1ff;
   text-style = normal;
   margin: 0 0.2em;
+  cursor: pointer;
 }
 
 .${cssPrefix}-action-icon:hover>.${cssPrefix}-tooltip {

@@ -21,3 +21,5 @@ function myUuidResolutionFunction(uuid) {
 
 init(myUuidResolutionFunction);
 ```
+
+![preview](./preview.jpg)
