@@ -1,7 +1,7 @@
 
-console.log("neo-vision loaded!")
+console.log("uuid glasses loaded!")
 
-const cssPrefix = 'neo-v';
+const cssPrefix = 'u4ggls';
 const checkIntervalMs = 200;
 
 // https://stackoverflow.com/a/6640851

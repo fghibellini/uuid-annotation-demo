@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
-  "name": "Neo-Vision",
+  "name": "Annotated UUIDs",
   "version": "1.0",
-  "description": "Augmented reality for people who share a lot of their existence with UUIDs",
+  "description": "Augmented reality for people who regularly look at UUIDs",
   "icons": {
-	  "32": "images/icon-32.png"
+    "32": "images/icon-32.png"
   },
   "content_scripts": [
     {
