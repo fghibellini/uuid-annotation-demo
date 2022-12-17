@@ -24,4 +24,6 @@ init(myUuidResolutionFunction);
 
 ![preview](./preview.jpg)
 
-[Blog post](https://fghibellini.com/posts/2022-12-17-Leveraging-UUIDs-to-the-Max/index.html) with a deeper explanation.
+## More
+
+- [Blog post](https://fghibellini.com/posts/2022-12-17-Leveraging-UUIDs-to-the-Max/index.html) with a deeper explanation.
