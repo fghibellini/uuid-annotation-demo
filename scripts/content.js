@@ -86,7 +86,7 @@ function isDecorated(element) {
 }
 
 function createActionIcon(tooltipHtmlContents) {
-  const actionIcon = document.createElement("span")
+  const actionIcon = document.createElement("div")
   actionIcon.classList.add(`${cssPrefix}-action-icon`);
   actionIcon.textContent = `ℹ️`;
   const tooltip = createTooltip(tooltipHtmlContents);

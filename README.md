@@ -1,5 +1,5 @@
 
-# UUIDs Annotated (Chrome Extension)
+# UUIDs Annotation DEMO (Chrome Extension)
 
 Are you tired of trying to memorize UUID's? Then this is the Chrome extension for you!
 
@@ -23,3 +23,5 @@ init(myUuidResolutionFunction);
 ```
 
 ![preview](./preview.jpg)
+
+[Blog post](https://fghibellini.com/posts/2022-12-17-Leveraging-UUIDs-to-the-Max/index.html) with a deeper explanation.
